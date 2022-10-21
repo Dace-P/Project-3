@@ -108,4 +108,26 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		bst.postorder(bst.root);
 		System.out.println();
 	}
+	public void deleteNode(E n){
+		Node<E> node;
+		node = find(n);
+		if(node.left == null && node.right == null){
+			node = null;
+		}
+		else if(node.left!= null && node.right == null){
+			node.parent.left = node.left;
+			node.left = node.parent;
+			node = null;
+		}
+		else if(node.left == null && node.right != null){
+			node.parent.right = node.right;
+			node.right = node.parent;
+			node = null;
+		}
+		else{
+			if(){
+				
+			}
+		}
+	}
 }

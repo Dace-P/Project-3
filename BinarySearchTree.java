@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.StringTokenizer;
+import java.io.*;
 
 public class BinarySearchTree<E extends Comparable<E>> {
 	// ---------------- nested Node class ----------------
@@ -128,17 +130,20 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		
 		Scanner scr = new Scanner(System.in);
 		while(on) {
-			command = scr.nextLine();
-			if (command.equals("add") || command.equals("delete")){
-				option = scr.nextInt();
+			StringTokenizer tokens = new StringTokenizer(scr.nextLine(), " ");
+			command = tokens.nextToken();
+			if (command.equals("ADD") || command.equals("DEL")){
+				option = Integer.parseInt(tokens.nextToken());
 			}
+			bst.commands();
 			bst.root = bst.root(bst.root);
 		}
 		scr.close();
 	}
-	
 
-	public static void commands(){
+
+	public void commands(){
+	//System.out.println(option);
 
 	switch(command){
 		case "ADD":
@@ -149,18 +154,23 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			break;
 		case "HGT":
 			bst.getHeight(bst.root);
+			System.out.println();
 			break;
 		case "PRE":
 			bst.preorder(bst.root);
+			System.out.println();
 			break;
 		case "POST":
 			bst.postorder(bst.root);
+			System.out.println();
 			break;
 		case "IN":
 			bst.inorder(bst.root);
+			System.out.println();
 			break;
 		case "LVL":
-
+			bst.getHeight(bst.root);
+			System.out.println();
 		case "CLEAR":
 			bst.clear(bst.root);
 			break;
@@ -176,16 +186,19 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		Node<E> node = find(n);
 		//Case 1: Node is a leaf
 		if(node.left == null && node.right == null){
-			if(node.parent.left != null){
-				if(node.parent.left.data == node.data){
-					node.parent.left = null;
+			if(node.parent != null){
+				if(node.parent.left != null){
+					if(node.parent.left.data == node.data){
+						node.parent.left = null;
 				}
 			}
 			if (node.parent.right != null){
 				if(node.parent.right.data == node.data){
 					node.parent.right = null;
+					}	
 				}
 			}
+			
 			node = null;
 			
 		}

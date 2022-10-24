@@ -1,6 +1,6 @@
 import java.util.Scanner;
 import java.util.StringTokenizer;
-import java.io.*;
+
 
 public class BinarySearchTree<E extends Comparable<E>> {
 	// ---------------- nested Node class ----------------
@@ -92,6 +92,15 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		postorder(p.right);
 		System.out.print(p.data + " ");
 	}
+
+	//Performs a level order traversal printing the values
+	public void levelorder(Node<E> node){
+		if (node==null)
+			return;
+		
+		
+	}
+
 	//Finds the next inorder value and returns the node it's located at
 	public Node<E> inOrderSuccesor(Node<E> node){
 		//Case 1 where there is a right subtree
@@ -101,20 +110,16 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			boolean bool = true;
 			while(bool){
 				if(nextNode.left == null){
-					bool = false;
-					System.out.println("here");
+					bool = false;;
 				}else{
 					nextNode = nextNode.left;
-					System.out.println("there");
 				}
 			}
 			return find(nextNode.data);
 		}
 		//Case 2 if there is not a right subtree
 		else{
-			System.out.println("neither");
 			return find(node.parent.data);
-			
 		}
 		
 	}
@@ -136,12 +141,12 @@ public class BinarySearchTree<E extends Comparable<E>> {
 				option = Integer.parseInt(tokens.nextToken());
 			}
 			bst.commands();
-			bst.root = bst.root(bst.root);
+			bst.root = bst.root();
 		}
 		scr.close();
 	}
 
-
+	//Takes in commmands to run the needed methods
 	public void commands(){
 	//System.out.println(option);
 
@@ -153,8 +158,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			bst.deleteNode(option);
 			break;
 		case "HGT":
-			bst.getHeight(bst.root);
-			System.out.println();
+			System.out.println(bst.getHeight(bst.root));
 			break;
 		case "PRE":
 			bst.preorder(bst.root);
@@ -169,10 +173,10 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			System.out.println();
 			break;
 		case "LVL":
-			bst.getHeight(bst.root);
+			bst.levelorder(bst.root);
 			System.out.println();
 		case "CLEAR":
-			bst.clear(bst.root);
+			bst.clear();
 			break;
 		case "END":
 			on = false;
@@ -186,7 +190,10 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		Node<E> node = find(n);
 		//Case 1: Node is a leaf
 		if(node.left == null && node.right == null){
-			if(node.parent != null){
+			if(node.parent == null){
+				root = null;
+			}
+			else{
 				if(node.parent.left != null){
 					if(node.parent.left.data == node.data){
 						node.parent.left = null;
@@ -217,22 +224,23 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 		//Case 4: Node has a left and right node
 		else{
-			if(node.equals(node.parent.left)){
-				Node<E> newNode = inOrderSuccesor(node);
-				System.out.println(newNode.data);
-				node.data = newNode.data;
-				newNode = null;
-				node.right = null;
-			}
+			
+			Node<E> newNode = inOrderSuccesor(node);
+			System.out.println(newNode.data);
+			node.data = newNode.data;
+			newNode = null;
+			node.right = null;
+			
 		}
 	}
 
 	//Clears the tree completely
-	public void clear(Node<E> root){
+	public void clear(){
 		root = null;
 	}
 
-	public Node<E> root(Node<E> node){
+	//Used to update the root when deleting or adding nodes. 
+	public Node<E> root(){
 		if(root != null){
 			while(root.parent != null){
 			root = root.parent;
@@ -241,19 +249,17 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		return root; 
 	}
 
+	//Retrieves the height of the tree 
 	public int getHeight(Node<E> node){
 		Node<E> temp = node;
 		
-		if(root == null){
-			return 0;
+		if(node == null){
+			return -1;	
 		}
 		else{
 			int left = getHeight(temp.left);
 			int right = getHeight(temp.right);
-			if (left > right)
-                return (left + 1);
-            else
-                return (right + 1);
+			return(Math.max(left, right)) + 1;
 		}
 		
 	}

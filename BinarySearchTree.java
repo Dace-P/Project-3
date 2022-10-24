@@ -95,67 +95,86 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		//Case 1 where there is a right subtree
 		if(node.right != null){
 			//loops through to find the next value on the leftmost of the right subtree
-			Node<E> nextNode = node;
+			Node<E> nextNode = node.right;
 			boolean bool = true;
 			while(bool){
 				if(nextNode.left == null){
 					bool = false;
+					System.out.println("here");
 				}else{
 					nextNode = nextNode.left;
+					System.out.println("there");
 				}
 			}
 			return find(nextNode.data);
 		}
 		//Case 2 if there is not a right subtree
 		else{
+			System.out.println("neither");
 			return find(node.parent.data);
+			
 		}
 		
-	}
-
-	public void delete(Node<E> n){
-		n.data = null;
-		n.left = null; 
-		n.right = null;
-		n.parent = null;
 	}
 
 //===============================================================
 // Simple test program
+	static String command;
+	static int option;
+	static BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
+	static Node<Integer> rootNode;
+	static boolean on = true;
 	public static void main(String[] args) {
-		BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
-		Scanner scr = new Scanner(System.in);
-		int n = scr.nextInt();
-		for(int i=0; i<n; i++) {
-			int a = scr.nextInt();
-			bst.insert(a);
-		}
 		
-		bst.inorder(bst.root);
-		System.out.println();
-		bst.preorder(bst.root);
-		System.out.println();
-		bst.postorder(bst.root);
-		System.out.println();
-		bst.deleteNode(4);
-		bst.inorder(bst.root);
-		System.out.println();
-		bst.preorder(bst.root);
-		System.out.println();
-		bst.postorder(bst.root);
-		System.out.println();
+		Scanner scr = new Scanner(System.in);
+		while(on) {
+			command = scr.nextLine();
+			if (command.equals("add") || command.equals("delete")){
+				option = scr.nextInt();
+			}
+			bst.root = bst.root(bst.root);
+		}
+		scr.close();
 	}
+	
+
+	public static void commands(){
+
+	switch(command){
+		case "ADD":
+			bst.insert(option);
+			break;
+		case "DEL":
+			bst.deleteNode(option);
+			break;
+		case "HGT":
+			bst.getHeight(bst.root);
+			break;
+		case "PRE":
+			bst.preorder(bst.root);
+			break;
+		case "POST":
+			bst.postorder(bst.root);
+			break;
+		case "IN":
+			bst.inorder(bst.root);
+			break;
+		case "LVL":
+
+		case "CLEAR":
+			bst.clear(bst.root);
+			break;
+		case "END":
+			on = false;
+			break;
+		}
+	}
+
+	//Deletes a node
 	public void deleteNode(E n){
-
+		//Find the location of the node
 		Node<E> node = find(n);
-		System.out.println(n);
-		System.out.println(node.data);
-		System.out.println(node.left);
-		if(node.left != null)
-			System.out.println(node.right.data);
-		if(node.right != null)
-			System.out.println(node.parent.data);
-
+		//Case 1: Node is a leaf
 		if(node.left == null && node.right == null){
 			if(node.parent.left != null){
 				if(node.parent.left.data == node.data){
@@ -167,33 +186,62 @@ public class BinarySearchTree<E extends Comparable<E>> {
 					node.parent.right = null;
 				}
 			}
-			delete(node);
+			node = null;
 			
 		}
+		//Case 2: Node has a left node
 		else if(node.left!= null && node.right == null){
-			if(node.parent.left != null){
-				if(node.parent.left.data == node.data){
-					node.parent.left = null;
-				}
-			}
-			if (node.parent.right != null){
-				if(node.parent.right.data == node.data){
-					node.parent.right = null;
-				}
-			}
-			node = node.left;
-			delete(node.right);
+			
+			node.data = node.left.data;
+			node.left = null;
+			
 		}
+		//Case 3: Node has a right node
 		else if(node.left == null && node.right != null){
-			node = node.right;
-			delete(node.right);
+			
+			node.data = node.right.data;
+			node.right = null;
 		}
+		//Case 4: Node has a left and right node
 		else{
 			if(node.equals(node.parent.left)){
 				Node<E> newNode = inOrderSuccesor(node);
+				System.out.println(newNode.data);
 				node.data = newNode.data;
-				delete(node);
+				newNode = null;
+				node.right = null;
 			}
 		}
+	}
+
+	//Clears the tree completely
+	public void clear(Node<E> root){
+		root = null;
+	}
+
+	public Node<E> root(Node<E> node){
+		if(root != null){
+			while(root.parent != null){
+			root = root.parent;
+			}
+		}
+		return root; 
+	}
+
+	public int getHeight(Node<E> node){
+		Node<E> temp = node;
+		
+		if(root == null){
+			return 0;
+		}
+		else{
+			int left = getHeight(temp.left);
+			int right = getHeight(temp.right);
+			if (left > right)
+                return (left + 1);
+            else
+                return (right + 1);
+		}
+		
 	}
 }

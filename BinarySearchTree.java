@@ -90,6 +90,35 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		postorder(p.right);
 		System.out.print(p.data + " ");
 	}
+	//Finds the next inorder value and returns the node it's located at
+	public Node<E> inOrderSuccesor(Node<E> node){
+		//Case 1 where there is a right subtree
+		if(node.right != null){
+			//loops through to find the next value on the leftmost of the right subtree
+			Node<E> nextNode = node;
+			boolean bool = true;
+			while(bool){
+				if(nextNode.left == null){
+					bool = false;
+				}else{
+					nextNode = nextNode.left;
+				}
+			}
+			return find(nextNode.data);
+		}
+		//Case 2 if there is not a right subtree
+		else{
+			return find(node.parent.data);
+		}
+		
+	}
+
+	public void delete(Node<E> n){
+		n.data = null;
+		n.left = null; 
+		n.right = null;
+		n.parent = null;
+	}
 
 //===============================================================
 // Simple test program
@@ -101,6 +130,14 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			int a = scr.nextInt();
 			bst.insert(a);
 		}
+		
+		bst.inorder(bst.root);
+		System.out.println();
+		bst.preorder(bst.root);
+		System.out.println();
+		bst.postorder(bst.root);
+		System.out.println();
+		bst.deleteNode(4);
 		bst.inorder(bst.root);
 		System.out.println();
 		bst.preorder(bst.root);
@@ -109,24 +146,53 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		System.out.println();
 	}
 	public void deleteNode(E n){
-		Node<E> node;
-		node = find(n);
+
+		Node<E> node = find(n);
+		System.out.println(n);
+		System.out.println(node.data);
+		System.out.println(node.left);
+		if(node.left != null)
+			System.out.println(node.right.data);
+		if(node.right != null)
+			System.out.println(node.parent.data);
+
 		if(node.left == null && node.right == null){
-			node = null;
+			if(node.parent.left != null){
+				if(node.parent.left.data == node.data){
+					node.parent.left = null;
+				}
+			}
+			if (node.parent.right != null){
+				if(node.parent.right.data == node.data){
+					node.parent.right = null;
+				}
+			}
+			delete(node);
+			
 		}
 		else if(node.left!= null && node.right == null){
-			node.parent.left = node.left;
-			node.left = node.parent;
-			node = null;
+			if(node.parent.left != null){
+				if(node.parent.left.data == node.data){
+					node.parent.left = null;
+				}
+			}
+			if (node.parent.right != null){
+				if(node.parent.right.data == node.data){
+					node.parent.right = null;
+				}
+			}
+			node = node.left;
+			delete(node.right);
 		}
 		else if(node.left == null && node.right != null){
-			node.parent.right = node.right;
-			node.right = node.parent;
-			node = null;
+			node = node.right;
+			delete(node.right);
 		}
 		else{
-			if(){
-				
+			if(node.equals(node.parent.left)){
+				Node<E> newNode = inOrderSuccesor(node);
+				node.data = newNode.data;
+				delete(node);
 			}
 		}
 	}

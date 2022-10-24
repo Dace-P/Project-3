@@ -249,10 +249,27 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		return root; 
 	}
 
-	//Retrieves the height of the tree 
+	//Retrieves the maximum height of the tree 
 	public int getHeight(Node<E> node){
 		Node<E> temp = node;
 		
+		if(node == null){
+			return -1;	
+		}
+		else{
+			int left = getHeight(temp.left);
+			int right = getHeight(temp.right);
+			return(Math.max(left, right)) + 1;
+		}
+		
+	}
+
+	//Retrieves the height of a specific node
+	public int getNodeHeight(Node<E> node, Node<E> target){
+		Node<E> temp = node;
+		if(node == target){
+			return 0;
+		}
 		if(node == null){
 			return -1;	
 		}

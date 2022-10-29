@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.*;
 
 
 public class BinarySearchTree<E extends Comparable<E>> {
@@ -94,12 +95,28 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	}
 
 	//Performs a level order traversal printing the values
-	public void levelorder(Node<E> node){
-		if (node==null)
+	public void levelorder(){
+		Queue<Node<E>> queue = new LinkedList<Node<E>>();
+		queue.add(root);
+		if (root == null){
 			return;
+		}
+		while(!queue.isEmpty()){
+			Node<E> node = queue.poll();
+			System.out.println(node.data);
+
+			if(node.left!=null){
+				queue.add(node.left);
+			}
+			if (node.right!=null){
+				queue.add(node.right);
+			}
+			
+		}
 		
 		
 	}
+
 
 	//Finds the next inorder value and returns the node it's located at
 	public Node<E> inOrderSuccesor(Node<E> node){
@@ -173,7 +190,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			System.out.println();
 			break;
 		case "LVL":
-			bst.levelorder(bst.root);
+			bst.levelorder();
 			System.out.println();
 		case "CLEAR":
 			bst.clear();
@@ -264,20 +281,4 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		
 	}
 
-	//Retrieves the height of a specific node
-	public int getNodeHeight(Node<E> node, Node<E> target){
-		Node<E> temp = node;
-		if(node == target){
-			return 0;
-		}
-		if(node == null){
-			return -1;	
-		}
-		else{
-			int left = getHeight(temp.left);
-			int right = getHeight(temp.right);
-			return(Math.max(left, right)) + 1;
-		}
-		
-	}
 }

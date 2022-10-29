@@ -117,7 +117,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
 
 	//Finds the next inorder value and returns the node it's located at
-	public Node<E> inOrderSuccesor(Node<E> node){
+	public Node<E> inOrderSuccessor(Node<E> node){
 		//Case 1 where there is a right subtree
 		if(node.right != null){
 			//loops through to find the next value on the leftmost of the right subtree
@@ -125,9 +125,31 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			boolean bool = true;
 			while(bool){
 				if(nextNode.left == null){
-					bool = false;;
+					bool = false;
 				}else{
 					nextNode = nextNode.left;
+				}
+			}
+			return find(nextNode.data);
+		}
+		//Case 2 if there is not a right subtree
+		else{
+			return find(node.parent.data);
+		}
+		
+	}
+	//Finds the previous inorder value and returns the node it's located at
+	public Node<E> inOrderPrecessor(Node<E> node){
+		//Case 1 where there is a right subtree
+		if(node.left != null){
+			//loops through to find the next value on the leftmost of the right subtree
+			Node<E> nextNode = node.left;
+			boolean bool = true;
+			while(bool){
+				if(nextNode.right == null){
+					bool = false;
+				}else{
+					nextNode = nextNode.right;
 				}
 			}
 			return find(nextNode.data);
@@ -226,27 +248,53 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 		//Case 2: Node has a left node
 		else if(node.left!= null && node.right == null){
-			node.data = node.left.data;
-			node.left = null;
+			
+			Node<E> newNode = node.left;
+			
+			if(node.data.compareTo(node.parent.data)<0){
+				node.parent.left = newNode;
+				newNode.parent = node.parent;
+
+			}
+			else{
+				node.parent.right = newNode;
+				newNode.parent = node.parent;
+			}
+			
+			node = null;
 			
 		}
 		//Case 3: Node has a right node
 		else if(node.left == null && node.right != null){
+			//Assigns newNode to the child of node
+			Node<E> newNode = node.right;
 			
-			node.data = node.right.data;
-			node.right = null;
+
+			if(node.data.compareTo(node.parent.data)<0){
+				node.parent.left = newNode;
+				newNode.parent = node.parent;
+
+			}
+			else{
+				node.parent.right = newNode;
+				newNode.parent = node.parent;
+			}
+			
+			node = null;
 		}
 		//Case 4: Node has a left and right node
 		else{
 			
-			Node<E> newNode = inOrderSuccesor(node);
-			System.out.println(newNode.data);
+			Node<E> newNode = inOrderSuccessor(node);
 			node.data = newNode.data;
-			if(newNode.left != null){
-
+			if(newNode.right != null){
+				newNode.parent.right = newNode.right;
+				newNode.right.parent = newNode.parent;
+				newNode = null;
+			}else{
+				newNode = null;
 			}
-			newNode = null;
-			node.right = null;
+			
 			
 		}
 	}
@@ -279,22 +327,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			return(Math.max(left, right)) + 1;
 		}
 		
-	}
-
-	//Retrieves the height of a specific node
-	public int getNodeHeight(Node<E> node, Node<E> target){
-		Node<E> temp = node;
-		if(node == target){
-			return 0;
-		}
-		if(node == null){
-			return -1;	
-		}
-		else{
-			int left = getHeight(temp.left);
-			int right = getHeight(temp.right);
-			return(Math.max(left, right)) + 1;
-		}
-		
-	}
+	}		
+	
 }

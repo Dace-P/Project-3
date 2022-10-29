@@ -113,8 +113,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			}
 			
 		}
-		
-		
 	}
 
 
@@ -228,7 +226,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 		//Case 2: Node has a left node
 		else if(node.left!= null && node.right == null){
-			
 			node.data = node.left.data;
 			node.left = null;
 			
@@ -245,6 +242,9 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			Node<E> newNode = inOrderSuccesor(node);
 			System.out.println(newNode.data);
 			node.data = newNode.data;
+			if(newNode.left != null){
+
+			}
 			newNode = null;
 			node.right = null;
 			
@@ -281,4 +281,20 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		
 	}
 
+	//Retrieves the height of a specific node
+	public int getNodeHeight(Node<E> node, Node<E> target){
+		Node<E> temp = node;
+		if(node == target){
+			return 0;
+		}
+		if(node == null){
+			return -1;	
+		}
+		else{
+			int left = getHeight(temp.left);
+			int right = getHeight(temp.right);
+			return(Math.max(left, right)) + 1;
+		}
+		
+	}
 }

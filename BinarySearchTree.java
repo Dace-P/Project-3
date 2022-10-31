@@ -103,7 +103,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 		while(!queue.isEmpty()){
 			Node<E> node = queue.poll();
-			System.out.println(node.data);
+			System.out.print(node.data + " ");
 
 			if(node.left!=null){
 				queue.add(node.left);
@@ -286,18 +286,19 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		else{
 			
 			Node<E> newNode = inOrderSuccessor(node);
-			node.data = newNode.data;
+			E e = newNode.data;
 			if(newNode.right != null){
-				newNode.parent.right = newNode.right;
-				newNode.right.parent = newNode.parent;
-				newNode = null;
+				deleteNode(newNode.data);
+				node.data = e;
 			}else{
-				newNode = null;
+				deleteNode(newNode.data);
+				node.data = e;
 			}
 			
-			
 		}
+	
 	}
+	
 
 	//Clears the tree completely
 	public void clear(){

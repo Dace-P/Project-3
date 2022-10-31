@@ -178,7 +178,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 				option = Integer.parseInt(tokens.nextToken());
 			}
 			bst.commands();
-			bst.root = bst.root();
 		}
 		scr.close();
 	}
@@ -303,16 +302,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	//Clears the tree completely
 	public void clear(){
 		root = null;
-	}
-
-	//Used to update the root when deleting or adding nodes. 
-	public Node<E> root(){
-		if(root != null){
-			while(root.parent != null){
-			root = root.parent;
-			}
-		}
-		return root; 
 	}
 
 	//Retrieves the maximum height of the tree 
